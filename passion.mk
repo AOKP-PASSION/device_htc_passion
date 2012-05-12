@@ -100,7 +100,7 @@ PRODUCT_PACKAGES += \
     gps.mahimahi \
     lights.mahimahi \
     sensors.mahimahi \
-    camera.qsd8k
+    #camera.qsd8k
 # Audio
 PRODUCT_PACKAGES += \
     libaudioutils \
