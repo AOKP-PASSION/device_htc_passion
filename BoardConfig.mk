@@ -34,16 +34,16 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM := qsd8k
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 
-TARGET_ARCH_VARIANT         := armv7-a-neon
-TARGET_CPU_ABI              := armeabi-v7a
-TARGET_CPU_ABI2             := armeabi
-TARGET_ARCH_VARIANT_CPU := cortex-a8
-TARGET_ARCH_VARIANT_FPU := neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
 
-ARCH_ARM_HAVE_VFP := true
-ARCH_ARM_HAVE_TLS_REGISTER  := true
+# Neon stuff
+TARGET_ARCH_VARIANT := armv7-a-neon
+ARCH_ARM_HAVE_TLS_REGISTER := true
 
-TARGET_USE_SCORPION_BIONIC_OPTIMIZATION := true
+# FPU compilation flags
+TARGET_GLOBAL_CFLAGS    += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS  += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
 
 TARGET_SPECIFIC_HEADER_PATH := device/htc/passion/include
 
@@ -59,6 +59,7 @@ WIFI_DRIVER_MODULE_ARG      := "iface_name=wlan firmware_path=/system/vendor/fir
 WIFI_DRIVER_MODULE_NAME     := "bcm4329"
 
 BOARD_USES_GENERIC_AUDIO := false
+
 # prevent breakage from QCOM_HARDWARE in system/audio.h
 COMMON_GLOBAL_CFLAGS += -DLEGACY_AUDIO_COMPAT
 
@@ -67,9 +68,6 @@ BOARD_KERNEL_CMDLINE    := no_console_suspend=1 wire.search_count=5
 #console=ttyMSM0,115200n8
 BOARD_KERNEL_BASE       := 0x20000000
 BOARD_KERNEL_NEW_PPPOX  := true
-
-TARGET_KERNEL_CONFIG    := evervolv_mahimahi_defconfig
-TARGET_KERNEL_SOURCE    := kernel/htc/qsd8k
 TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/kernel
 
 # Compass/Accererometer
@@ -83,6 +81,8 @@ TARGET_USES_GENLOCK     := true
 #COMMON_GLOBAL_CFLAGS    += -DMISSING_EGL_EXTERNAL_IMAGE
 # Our copybit supports YV12 conversion, so not needed
 #COMMON_GLOBAL_CFLAGS    += -DMISSING_EGL_PIXEL_FORMAT_YV12
+# This just breaks everything
+#COMMON_GLOBAL_CFLAGS    += -DFORCE_EGL_CONFIG=0x9 #0x5e5
 # We only have 2 buffers so still need to hack it.
 COMMON_GLOBAL_CFLAGS    += -DMISSING_GRALLOC_BUFFERS
 # Just a safety measure to make sure its all included
@@ -93,13 +93,23 @@ COMMON_GLOBAL_CFLAGS    += -DREFRESH_RATE=60
 TARGET_USE_OVERLAY      := false
 TARGET_HAVE_BYPASS      := false
 TARGET_USES_C2D_COMPOSITION := false
-# Allow fallback to ashmem
+
+# Try to use ASHMEM if possible (when non-MDP composition is used)
+# if enabled, set debug.sf.hw=1 in system.prop
 TARGET_GRALLOC_USES_ASHMEM := true
 
 # Debuging egl
 COMMON_GLOBAL_CFLAGS += -DEGL_TRACE
 
+# Find out what these do..if anything
+# used in cafs tree nothing actually present is ours (yet)
+#HAVE_ADRENO200_SOURCE := true
+#HAVE_ADRENO200_SC_SOURCE := true
+#HAVE_ADRENO200_FIRMWARE := true
+#BOARD_USES_QCNE := true
+# I dont think these do anything but everyone else is using them
 #BOARD_USE_QCOM_PMEM := true
+#BOARD_USES_ADRENO_200 := true
 #TARGET_HARDWARE_3D := false
 
 # Qcom
@@ -152,8 +162,8 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 150994944 #0x09000000 #0x08400000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 205783040 #0x0c440000
 else
 # Use larger system partiton
-BOARD_SYSTEMIMAGE_PARTITION_SIZE    := 220200960 # 230686720
-BOARD_USERDATAIMAGE_PARTITION_SIZE  := 228589568 # 209715200
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 230686720
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 209715200
 endif
 
 BOARD_FLASH_BLOCK_SIZE := 131072

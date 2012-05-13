@@ -19,16 +19,15 @@
 # product configuration (apps).
 #
 
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
 # This is where we'd set a backup provider if we had one
 #$(call inherit-product, device/sample/products/backup_overlay.mk)
 
 $(call inherit-product, device/htc/passion/passion_us.mk)
 
-ifeq ($(MINISKIRT),true)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/small_base_telephony.mk)
-else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-endif
 
 # Discard inherited values and use our own instead.
 PRODUCT_NAME := full_passion

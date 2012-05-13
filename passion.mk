@@ -16,29 +16,39 @@
 
 ## (1) First, the most specific values, i.e. the aspects that are specific to GSM
 
-# Overlay / Locale
+# Overlay files / Locale
 DEVICE_PACKAGE_OVERLAYS := device/htc/passion/overlay
 PRODUCT_LOCALES := en
 
-# Passion uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
-
 # General propreties
-PRODUCT_PROPERTY_OVERRIDES += \
+PRODUCT_PROPERTY_OVERRIDES := \
     ro.sf.lcd_density=240 \
-    windowsmgr.max_events_per_sec=120 \
     wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=45 \
+    wifi.supplicant_scan_interval=80 \
     ro.media.dec.jpeg.memcap=20000000 \
     ro.opengles.version=131072
 
-# Dalvik properties
-# dexop-flags: "v=" n|r|a, "o=" n|v|a|f, "m=y" register map
-# v=verify o=optimize: n=none r=remote a=all f=full v=verified
+#ota system updated version
+ADDITIONAL_BUILD_PROPERTIES += ro.build.branch=HWA
+
+# Performance Tweaks
 PRODUCT_PROPERTY_OVERRIDES += \
+    pm.sleep_mode=1 \
+    ro.ril.disable.power.collapse=0 \
+    windowsmgr.max_events_per_sec=150 \
+    ro.telephony.call_ring.delay=0 \
+    ro.lge.proximity.delay=10 \
+    mot.proximity.delay=10 \
     dalvik.vm.dexopt-flags=m=y \
     dalvik.vm.checkjni=false
+
+###dalvik.vm.dexopt-flags=v=n,o=v,m=y
+###dalvik.vm.checkjni=false
+
+# Scrolling cache 0:enable, 1:default enable, 2:default disable, 3:disable
+#ADDITIONAL_DEFAULT_PROPERTIES += \
+#    persist.sys.scrollingcache=2
+
 
 # Default heap settings for 512mb device
 include frameworks/base/build/phone-hdpi-512-dalvik-heap.mk
@@ -47,18 +57,16 @@ include frameworks/base/build/phone-hdpi-512-dalvik-heap.mk
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 # Ril properties
-# default_network: 0 => GSM/WCDMA (WCDMA preferred), 3 => GSM/WCDMA (auto mode)
-# ril.v3: Also available: skipbrokendatacall,facilitylock,datacall,icccardstatus
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.ril.enable.managed.roaming=1 \
     ro.ril.oem.nosim.ecclist=911,112,999,000,08,118,120,122,110,119,995 \
     ro.ril.emc.mode=2 \
     ro.ril.hsxpa=2 \
     ro.ril.gprsclass=10 \
-    ro.ril.disable.power.collapse=0 \
+    ro.ril.disable.power.collapse=false \
     rild.libpath=/system/lib/libhtc_ril.so \
     ro.telephony.call_ring.delay=2 \
-    ro.telephony.ril.v3=signalstrength,singlepdp \
+    ro.telephony.ril.v3=signalstrength \
     ro.telephony.default_network=0
 
 # Don't set /proc/sys/vm/dirty_ratio to 0 when USB mounting
@@ -83,27 +91,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.enabletr=false
 
 # Set usb type
-ADDITIONAL_DEFAULT_PROPERTIES += \
+ADDITIONAL_DEFAULT_PROPERTIES := \
     persist.sys.usb.config=mass_storage \
     persist.service.adb.enable=1
-
-# Scrolling cache 0:enable, 1:default enable, 2:default disable, 3:disable
-#ADDITIONAL_DEFAULT_PROPERTIES += \
-#    persist.sys.scrollingcache=2
 
 #
 # Packages needed for Passion
 #
 # Sensors
-PRODUCT_PACKAGES += \
+PRODUCT_PACKAGES := \
     com.android.future.usb.accessory \
     gps.mahimahi \
     lights.mahimahi \
     sensors.mahimahi \
-    #camera.qsd8k
+    librs_jni \
+    camera.qsd8k
 # Audio
 PRODUCT_PACKAGES += \
-    libaudioutils \
     audio.a2dp.default \
     audio.primary.qsd8k \
     audio_policy.qsd8k
@@ -111,6 +115,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     copybit.qsd8k \
     gralloc.qsd8k \
+    hwcomposer.default \
     hwcomposer.qsd8k \
     libgenlock \
     libmemalloc \
@@ -123,8 +128,12 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libstagefrighthw
 
+# Passion uses high-density artwork where available
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
+
 # Prebuilt files/configs
-PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES := \
     device/htc/passion/init.mahimahi.rc:root/init.mahimahi.rc \
     device/htc/passion/init.mahimahi.usb.rc:root/init.mahimahi.usb.rc \
     device/htc/passion/ueventd.mahimahi.rc:root/ueventd.mahimahi.rc \
@@ -136,11 +145,24 @@ PRODUCT_COPY_FILES += \
     device/htc/passion/vold.fstab:system/etc/vold.fstab \
     device/htc/passion/sysctl.conf:system/etc/sysctl.conf
 
+# other stuff
+PRODUCT_COPY_FILES += \
+    device/htc/passion/prebuilt/libOmxCore.so:system/lib/libOmxCore.so \
+    device/htc/passion/prebuilt/libOmxVdec.so:system/lib/libOmxVdec.so \
+    device/htc/passion/prebuilt/libOmxVidEnc.so:system/lib/libOmxVidEnc.so
+
+
 # Prebuilt Modules
-ifneq ($(BUILD_KERNEL),true)
 PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/bcm4329.ko:system/lib/modules/bcm4329.ko
+
+# Prebuilt Kernel
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+LOCAL_KERNEL := device/htc/passion/prebuilt/kernel
+else
+LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
+PRODUCT_COPY_FILES += $(LOCAL_KERNEL):kernel
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -161,6 +183,9 @@ PRODUCT_COPY_FILES += \
 # media config xml file
 PRODUCT_COPY_FILES += \
     device/htc/passion/media_profiles.xml:system/etc/media_profiles.xml
+
+# Proprietary makefile
+$(call inherit-product-if-exists, vendor/htc/passion/passion-vendor.mk)
 
 # media profiles and capabilities spec
 $(call inherit-product, device/htc/passion/media_a1026.mk)

@@ -43,6 +43,8 @@ touch.toolSize.linearScale = 10
 touch.toolSize.linearBias = 160
 touch.toolSize.isSummed = 1
 
+touch.filterTouchEvents = 1
+
 # Pressure
 # Driver reports signal strength as pressure.
 #
@@ -64,9 +66,6 @@ touch.size.calibration = normalized
 
     # Orientation
 touch.orientation.calibration = none
-
-    # JumpyTouchFilter
-touch.filterTouchEvents = 1
 
     # Keyboard
 keyboard.layout = mahimahi-keypad
