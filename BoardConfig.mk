@@ -39,11 +39,9 @@ TARGET_CPU_ABI2 := armeabi
 
 # Neon stuff
 TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_ARCH_VARIANT_CPU := cortex-a8
 ARCH_ARM_HAVE_TLS_REGISTER := true
-
-# FPU compilation flags
-TARGET_GLOBAL_CFLAGS    += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS  += -mtune=cortex-a8 -mfpu=neon -mfloat-abi=softfp
+ARCH_ARM_HAVE_VFP := true
 
 TARGET_SPECIFIC_HEADER_PATH := device/htc/passion/include
 
@@ -68,13 +66,13 @@ BOARD_KERNEL_CMDLINE    := no_console_suspend=1 wire.search_count=5
 #console=ttyMSM0,115200n8
 BOARD_KERNEL_BASE       := 0x20000000
 BOARD_KERNEL_NEW_PPPOX  := true
-TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/kernel
+TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/root/kernel
 
 # Compass/Accererometer
 BOARD_VENDOR_USE_AKMD := akm8973
 
 # Hardware rendering
-BOARD_EGL_CFG           := device/htc/passion/egl.cfg
+BOARD_EGL_CFG           := device/htc/passion/prebuilt/lib/egl/egl.cfg
 USE_OPENGL_RENDERER     := true
 TARGET_USES_GENLOCK     := true
 # Unnecessary with new egl libs
