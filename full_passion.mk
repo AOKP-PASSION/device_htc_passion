@@ -101,8 +101,12 @@ PRODUCT_COPY_FILES += \
 
 # non-rotational init.d script
 PRODUCT_COPY_FILES += \
-    device/htc/passion/prebuilt/etc/init.d/05sdcard:system/etc/init.d/05sdcard
-
+    device/htc/passion/prebuilt/bin/a2sd:system/bin/a2sd \
+    device/htc/passion/prebuilt/bin/e2fsck:system/bin/e2fsck \
+    device/htc/passion/prebuilt/etc/init.d/03sdcard:system/etc/init.d/03sdcard \
+    device/htc/passion/prebuilt/etc/init.d/05mountext:system/etc/init.d/05mountext \
+    device/htc/passion/prebuilt/etc/init.d/10apps2sd:system/etc/init.d/10apps2sd
+    
 # media config xml file
 PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml

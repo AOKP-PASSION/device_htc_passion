@@ -1,4 +1,4 @@
-#!/system/bin/sh
+#!/system/xbin/bash
 
 mount='/system/bin/mount'
 mkdir='/system/bin/mkdir'
