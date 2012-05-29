@@ -84,7 +84,7 @@ PRODUCT_COPY_FILES += \
 
 # Optical trackball
 PRODUCT_COPY_FILES += \
-    device/htc/passion/prebuilt/usr/idc/curcial-oj.idc:system/usr/idc/curcial-oj.idc
+    device/htc/passion/prebuilt/usr/idc/mahimahi-nav.idc:system/usr/idc/mahimahi-nav.idc
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
