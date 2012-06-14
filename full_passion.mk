@@ -16,13 +16,10 @@
 
 # Overlay / Locale
 DEVICE_PACKAGE_OVERLAYS := device/htc/passion/overlay
-PRODUCT_LOCALES := en
 
 # General propreties
 PRODUCT_PROPERTY_OVERRIDES := \
     ro.sf.lcd_density=240 \
-    wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=80 \
     ro.media.dec.jpeg.memcap=20000000 \
     ro.opengles.version=131072
 
@@ -33,13 +30,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     windowsmgr.max_events_per_sec=150 \
     ro.telephony.call_ring.delay=0 \
     ro.lge.proximity.delay=10 \
-    mot.proximity.delay=10 \
-    dalvik.vm.dexopt-flags=m=y \
-    dalvik.vm.checkjni=false
+    mot.proximity.delay=10
 
-# Inc uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
@@ -47,12 +39,6 @@ PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/root/init.mahimahi.rc:root/init.mahimahi.rc \
     device/htc/passion/prebuilt/root/init.mahimahi.usb.rc:root/init.mahimahi.usb.rc \
     device/htc/passion/prebuilt/root/ueventd.mahimahi.rc:root/ueventd.mahimahi.rc
-
-# Default heap settings for 512mb device
-include frameworks/base/build/phone-hdpi-512-dalvik-heap.mk
-
-# we have enough storage space to hold precise GC data
-PRODUCT_TAGS += dalvik.gc.type-precise
 
 # Ril properties
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -68,15 +54,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.default_network=0
 
 PRODUCT_COPY_FILES += \
-    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
-    frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
-    frameworks/base/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
+   frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
 # Touchscreen
 PRODUCT_COPY_FILES += \
@@ -106,7 +84,7 @@ PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/etc/init.d/03sdcard:system/etc/init.d/03sdcard \
     device/htc/passion/prebuilt/etc/init.d/05mountext:system/etc/init.d/05mountext \
     device/htc/passion/prebuilt/etc/init.d/10apps2sd:system/etc/init.d/10apps2sd
-    
+
 # media config xml file
 PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml
@@ -133,50 +111,11 @@ PRODUCT_COPY_FILES += \
 #
 # Sensors
 PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory \
     gps.mahimahi \
     lights.mahimahi \
     sensors.mahimahi \
     librs_jni \
     camera.qsd8k
-# Audio
-PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    audio.primary.qsd8k \
-    audio_policy.qsd8k
-# GPU
-PRODUCT_PACKAGES += \
-    copybit.qsd8k \
-    gralloc.qsd8k \
-    hwcomposer.qsd8k \
-    libgenlock \
-    libmemalloc \
-    libtilerenderer \
-    libQcomUI
-# OMX
-PRODUCT_PACKAGES += \
-    libOmxCore \
-    libOmxVidEnc \
-    libOmxVdec \
-    libstagefrighthw
-
-# Enable GPU composition (0: cpu, 1: gpu)
-# Note: must be 1 for composition.type to work
-PRODUCT_PROPERTY_OVERRIDES += debug.sf.hw=1
-
-# Enable copybit composition
-PRODUCT_PROPERTY_OVERRIDES += debug.composition.type=mdp
-
-# Force 2 buffers since gralloc defaults to 3 (we only have 2)
-PRODUCT_PROPERTY_OVERRIDES += debug.gr.numframebuffers=2
-
-# HardwareRenderer properties
-# dirty regions: "false" disables partial invalidates (override if enabletr=true)
-PRODUCT_PROPERTY_OVERRIDES += \
-    hwui.render_dirty_regions=false \
-    hwui.disable_vsync=true \
-    hwui.print_config=choice \
-    debug.enabletr=false
 
 # USB
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -201,7 +140,7 @@ $(call inherit-product-if-exists, vendor/htc/passion/passion-vendor.mk)
 $(call inherit-product, device/htc/passion/media_a1026.mk)
 
 # stuff common to all HTC phones
-$(call inherit-product, device/htc/common/common.mk)
+$(call inherit-product, device/htc/qsd8k-common/qsd8k.mk)
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)

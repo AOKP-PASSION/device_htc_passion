@@ -31,40 +31,10 @@ BOARD_HAVE_HTC_FFC := true
 
 # Inherit from the proprietary version
 -include vendor/htc/passion/BoardConfigVendor.mk
+# inherit common defines for all qsd8k devices
+include device/htc/qsd8k-common/BoardConfigCommon.mk
 
 TARGET_BOOTLOADER_BOARD_NAME := mahimahi
-TARGET_NO_BOOTLOADER := true
-
-# QSD8250
-TARGET_BOARD_PLATFORM := qsd8k
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
-
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-
-# Neon stuff
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_ARCH_VARIANT_CPU := cortex-a8
-ARCH_ARM_HAVE_TLS_REGISTER := true
-ARCH_ARM_HAVE_VFP := true
-
-TARGET_SPECIFIC_HEADER_PATH := device/htc/passion/include
-
-# Wifi related defines
-BOARD_WPA_SUPPLICANT_DRIVER      := WEXT
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
-WPA_SUPPLICANT_VERSION           := VER_0_8_X
-BOARD_WLAN_DEVICE                := bcm4329
-WIFI_DRIVER_MODULE_PATH     	  := "/system/lib/modules/bcm4329.ko"
-WIFI_DRIVER_FW_PATH_STA     	  := "/system/vendor/firmware/fw_bcm4329.bin"
-WIFI_DRIVER_FW_PATH_AP     	  := "/system/vendor/firmware/fw_bcm4329_apsta.bin"
-WIFI_DRIVER_MODULE_ARG     	  := "iface_name=wlan firmware_path=/system/vendor/firmware/fw_bcm4329.bin nvram_path=/proc/calibration"
-WIFI_DRIVER_MODULE_NAME    	  := "bcm4329"
-
-BOARD_USES_GENERIC_AUDIO := false
-
-# prevent breakage from QCOM_HARDWARE in system/audio.h
-COMMON_GLOBAL_CFLAGS += -DLEGACY_AUDIO_COMPAT
 
 # Kernel
 BOARD_KERNEL_CMDLINE    := no_console_suspend=1 wire.search_count=5
@@ -73,61 +43,6 @@ BOARD_KERNEL_BASE       := 0x20000000
 BOARD_KERNEL_NEW_PPPOX  := true
 TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/root/kernel
 
-# Compass/Accererometer
-BOARD_VENDOR_USE_AKMD := akm8973
-
-# Hardware rendering
-BOARD_EGL_CFG           := device/htc/passion/prebuilt/lib/egl/egl.cfg
-USE_OPENGL_RENDERER     := true
-TARGET_USES_GENLOCK     := true
-# Unnecessary with new egl libs
-#COMMON_GLOBAL_CFLAGS    += -DMISSING_EGL_EXTERNAL_IMAGE
-# Our copybit supports YV12 conversion, so not needed
-#COMMON_GLOBAL_CFLAGS    += -DMISSING_EGL_PIXEL_FORMAT_YV12
-# This just breaks everything
-#COMMON_GLOBAL_CFLAGS    += -DFORCE_EGL_CONFIG=0x9 #0x5e5
-# We only have 2 buffers so still need to hack it.
-COMMON_GLOBAL_CFLAGS    += -DMISSING_GRALLOC_BUFFERS
-# Just a safety measure to make sure its all included
-COMMON_GLOBAL_CFLAGS    += -DQCOM_HARDWARE
-# Force refresh rate since fps calc is broke and reports 0
-COMMON_GLOBAL_CFLAGS    += -DREFRESH_RATE=60
-# qsd8k: no support for overlay, bypass, or c2d
-TARGET_USE_OVERLAY      := false
-TARGET_HAVE_BYPASS      := false
-TARGET_USES_C2D_COMPOSITION := false
-
-# Try to use ASHMEM if possible (when non-MDP composition is used)
-# if enabled, set debug.sf.hw=1 in system.prop
-TARGET_GRALLOC_USES_ASHMEM := true
-
-# Debuging egl
-COMMON_GLOBAL_CFLAGS += -DEGL_TRACE
-
-# Find out what these do..if anything
-# used in cafs tree nothing actually present is ours (yet)
-#HAVE_ADRENO200_SOURCE := true
-#HAVE_ADRENO200_SC_SOURCE := true
-#HAVE_ADRENO200_FIRMWARE := true
-#BOARD_USES_QCNE := true
-# I dont think these do anything but everyone else is using them
-#BOARD_USE_QCOM_PMEM := true
-#BOARD_USES_ADRENO_200 := true
-#TARGET_HARDWARE_3D := false
-
-# Qcom
-BOARD_VENDOR_QCOM_AMSS_VERSION := 3200
-BOARD_USES_QCOM_HARDWARE := true
-BOARD_USES_QCOM_LIBS := true
-
-# Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-
-# FM
-BOARD_HAVE_FM_RADIO := true
-BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
-
 # GPS HAL and AMSS version
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := mahimahi
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 3200
@@ -135,13 +50,9 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 3200
 # RIL
 BOARD_USE_NEW_LIBRIL_HTC := true
 
-# Misc
-BOARD_USE_OPENSSL_ENGINE := true
-
 # Hacks
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
 BOARD_USE_LEGACY_TRACKPAD       := true
-TARGET_FORCE_CPU_UPLOAD         := true
 
 # cat /proc/mtd #AOSP                   # cat /proc/mtd #CM7
 # dev:    size   erasesize  name        # dev:    size   erasesize  name
@@ -170,5 +81,3 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 209715200
 endif
 
 BOARD_FLASH_BLOCK_SIZE := 131072
-
-TARGET_RELEASETOOLS_EXTENSIONS := device/htc/common
