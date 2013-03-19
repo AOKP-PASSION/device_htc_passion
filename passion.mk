@@ -108,11 +108,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	
 #AOKP
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.device.chipset=Qualcomm Snapdragon QSD8K
-	ro.device.cpu=1.1GHz 
-	ro.device.gpu=Adreno 200
-	ro.device.rear_cam=5 MP
-	ro.device.front_cam=None
+	ro.device.chipset=Qualcomm Snapdragon QSD8K \
+	ro.device.cpu=1.1GHz \
+	ro.device.gpu=Adreno 200 \
+	ro.device.rear_cam=5 MP \ 
+	ro.device.front_cam=None \
 	ro.device.screen_res=480x800	
 		
 # Permissions
