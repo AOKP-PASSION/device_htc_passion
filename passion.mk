@@ -95,6 +95,22 @@ PRODUCT_COPY_FILES += \
 	device/htc/passion/prebuilt/etc/init.d/10apps2sd:system/etc/init.d/10apps2sd \
 	device/htc/passion/prebuilt/etc/init.d/20extgapps:system/etc/init.d/20extgapps
 	
+#Goo.im
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.goo.developerid=zyr3x \
+    ro.goo.board=passion \
+    ro.goo.rom=AOKPMR1passion \
+    ro.goo.version=$(shell date +%Y%m%d)
+	
+#AOKP
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.device.chipset=Qualcomm Snapdragon QSD8K
+	ro.device.cpu=1.1GHz 
+	ro.device.gpu=Adreno 200
+	ro.device.rear_cam=5 MP
+	ro.device.front_cam=None
+	ro.device.screen_res=480x800	
+		
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
