@@ -88,8 +88,12 @@ PRODUCT_COPY_FILES += \
 	device/htc/passion/prebuilt/xbin/bash:system/xbin/bash \
 	device/htc/passion/prebuilt/xbin/powertop:system/xbin/powertop \
 	device/htc/passion/prebuilt/xbin/zipalign:system/xbin/zipalign \
+	device/htc/passion/prebuilt/xbin/cpueater:system/xbin/cpueater \
+	device/htc/passion/prebuilt/xbin/timeinfo:system/xbin/timeinfo \
+	device/htc/passion/prebuilt/xbin/bttest:system/xbin/bttest \
 	device/htc/passion/prebuilt/bin/a2sd:system/bin/a2sd \
 	device/htc/passion/prebuilt/bin/fix_permissions:system/bin/fix_permissions \
+	device/htc/passion/prebuilt/etc/profile:system/etc/profile \
 	device/htc/passion/prebuilt/etc/init.d/05mountext:system/etc/init.d/05mountext \
 	device/htc/passion/prebuilt/etc/init.d/06handleswap:system/etc/init.d/06handleswap \
 	device/htc/passion/prebuilt/etc/init.d/10apps2sd:system/etc/init.d/10apps2sd \
