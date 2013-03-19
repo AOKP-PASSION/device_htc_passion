@@ -121,7 +121,7 @@ static int init_prop(struct led_prop *prop)
         return 0;
     fd = open(prop->filename, O_RDWR);
     if (fd < 0) {
-        LOGE("init_prop: %s cannot be opened (%s)\n", prop->filename,
+        ALOGE("init_prop: %s cannot be opened (%s)\n", prop->filename,
              strerror(errno));
         return -errno;
     }
@@ -167,7 +167,7 @@ write_int(struct led_prop *prop, int value)
     if (prop->fd < 0)
         return 0;
 
-    LOGV("%s %s: 0x%x\n", __func__, prop->filename, value);
+    ALOGV("%s %s: 0x%x\n", __func__, prop->filename, value);
 
     bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
     while (bytes > 0) {
@@ -193,7 +193,7 @@ write_rgb(struct led_prop *prop, int red, int green, int blue)
     if (prop->fd < 0)
         return 0;
 
-    LOGV("%s %s: red:%d green:%d blue:%d\n",
+    ALOGV("%s %s: red:%d green:%d blue:%d\n",
           __func__, prop->filename, red, green, blue);
 
     bytes = snprintf(buffer, sizeof(buffer), "%d %d %d\n", red, green, blue);
@@ -237,7 +237,7 @@ set_trackball_light(struct light_state_t const* state)
         mode = state->flashOnMS;
         period = state->flashOffMS;
     }
-    LOGV("%s color=%08x mode=%d period %d\n", __func__,
+    ALOGV("%s color=%08x mode=%d period %d\n", __func__,
         state->color, mode, period);
 
 
@@ -248,11 +248,11 @@ set_trackball_light(struct light_state_t const* state)
 
         rc = write_rgb(&leds[JOGBALL_LED].color, red, green, blue);
         if (rc != 0)
-            LOGE("set color failed rc = %d\n", rc);
+            ALOGE("set color failed rc = %d\n", rc);
         if (period) {
             rc = write_int(&leds[JOGBALL_LED].period, period);
             if (rc != 0)
-               LOGE("set period failed rc = %d\n", rc);
+               ALOGE("set period failed rc = %d\n", rc);
         }
     }
     // If the value isn't changing, don't set it, because this
@@ -274,7 +274,7 @@ handle_trackball_light_locked(int type)
     if (g_attention->flashMode == LIGHT_FLASH_HARDWARE)
         attn_mode = g_attention->flashOnMS;
 
-    LOGV("%s type %d attention %p notify %p\n",
+    ALOGV("%s type %d attention %p notify %p\n",
         __func__, type, g_attention, g_notify);
 
     switch (type) {
@@ -298,10 +298,10 @@ handle_trackball_light_locked(int type)
         }
     }
     if (new_state == 0) {
-        LOGE("%s: unknown type (%d)\n", __func__, type);
+        ALOGE("%s: unknown type (%d)\n", __func__, type);
         return;
     }
-    LOGV("%s new state %p\n", __func__, new_state);
+    ALOGV("%s new state %p\n", __func__, new_state);
     set_trackball_light(new_state);
     return;
 }
@@ -320,7 +320,7 @@ set_light_backlight(struct light_device_t* dev,
 {
     int err = 0;
     int brightness = rgb_to_brightness(state);
-    LOGV("%s brightness=%d color=0x%08x",
+    ALOGV("%s brightness=%d color=0x%08x",
             __func__,brightness, state->color);
     pthread_mutex_lock(&g_lock);
     g_backlight = brightness;
@@ -356,9 +356,8 @@ set_speaker_light_locked(struct light_device_t* dev,
 {
     int len;
     unsigned int colorRGB;
-
-    /* Red = amber_led, blue or green = green_led */
     int r, g, b;
+
     /* un-dim light as we can't handle the dimmed one */
     r = (state->color >> 16) & 0xff;
     g = (state->color >> 8) & 0xff;
@@ -378,7 +377,7 @@ set_speaker_light_locked(struct light_device_t* dev,
 
     switch (state->flashMode) {
         case LIGHT_FLASH_TIMED:
-            LOGV("set_led_state colorRGB=%08X, flashing\n", colorRGB);
+            ALOGV("set_led_state colorRGB=%08X, flashing\n", colorRGB);
             switch (colorRGB) {
                 case RGB_RED:
                     write_int(&leds[RED_LED].blink, 1);
@@ -400,13 +399,13 @@ set_speaker_light_locked(struct light_device_t* dev,
                     break;
                     break;
                 default:
-                    LOGE("set_led_state colorRGB=%08X, unknown color\n",
+                    ALOGE("set_led_state colorRGB=%08X, unknown color\n",
                           colorRGB);
                     break;
             }
             break;
         case LIGHT_FLASH_NONE:
-            LOGV("set_led_state colorRGB=%08X, on\n", colorRGB);
+            ALOGV("set_led_state colorRGB=%08X, on\n", colorRGB);
             switch (colorRGB) {
                case RGB_RED:
                     /*no support for red solid */
@@ -432,13 +431,13 @@ set_speaker_light_locked(struct light_device_t* dev,
                     write_int(&leds[RED_LED].brightness, 0);
                     break;
                 default:
-                    LOGE("set_led_state colorRGB=%08X, unknown color\n",
+                    ALOGE("set_led_state colorRGB=%08X, unknown color\n",
                           colorRGB);
                     break;
             }
             break;
         default:
-            LOGE("set_led_state colorRGB=%08X, unknown mode %d\n",
+            ALOGE("set_led_state colorRGB=%08X, unknown mode %d\n",
                   colorRGB, state->flashMode);
     }
     return 0;
@@ -449,7 +448,7 @@ set_light_battery(struct light_device_t* dev,
         struct light_state_t const* state)
 {
     pthread_mutex_lock(&g_lock);
-    LOGV("%s mode=%d color=0x%08x",
+    ALOGV("%s mode=%d color=0x%08x",
             __func__,state->flashMode, state->color);
     set_speaker_light_locked(dev, state);
     pthread_mutex_unlock(&g_lock);
@@ -462,7 +461,7 @@ set_light_notifications(struct light_device_t* dev,
 {
     pthread_mutex_lock(&g_lock);
 
-    LOGV("%s mode=%d color=0x%08x On=%d Off=%d\n",
+    ALOGV("%s mode=%d color=0x%08x On=%d Off=%d\n",
             __func__,state->flashMode, state->color,
             state->flashOnMS, state->flashOffMS);
     /*
@@ -525,7 +524,7 @@ set_light_attention(struct light_device_t* dev,
 {
     unsigned int colorRGB;
 
-    LOGV("%s color=0x%08x mode=0x%08x submode=0x%08x",
+    ALOGV("%s color=0x%08x mode=0x%08x submode=0x%08x",
             __func__, state->color, state->flashMode, state->flashOnMS);
 
     pthread_mutex_lock(&g_lock);
@@ -541,7 +540,7 @@ set_light_attention(struct light_device_t* dev,
             colorRGB = set_rgb(0, 0, 0);
             break;
         default:
-            LOGE("%s colorRGB=%08X, unknown color\n",
+            ALOGE("%s colorRGB=%08X, unknown color\n",
                           __func__, state->color);
             colorRGB = set_rgb(101, 255, 96);
             break;
@@ -634,7 +633,7 @@ static struct hw_module_methods_t lights_module_methods = {
 /*
  * The lights Module
  */
-const struct hw_module_t HAL_MODULE_INFO_SYM = {
+struct hw_module_t HAL_MODULE_INFO_SYM = {
     .tag = HARDWARE_MODULE_TAG,
     .version_major = 1,
     .version_minor = 0,

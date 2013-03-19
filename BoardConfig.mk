@@ -24,11 +24,6 @@
 # against the traditional rules of inheritance).
 USE_CAMERA_STUB := true
 
-# Additional Camera hacks
-TARGET_LEGACY_CAMERA := true
-TARGET_CAMERA_WRAPPER := qsd8k
-BOARD_HAVE_HTC_FFC := true
-
 # Inherit from the proprietary version
 -include vendor/htc/passion/BoardConfigVendor.mk
 # inherit common defines for all qsd8k devices
@@ -41,43 +36,25 @@ BOARD_KERNEL_CMDLINE    := no_console_suspend=1 wire.search_count=5
 #console=ttyMSM0,115200n8
 BOARD_KERNEL_BASE       := 0x20000000
 BOARD_KERNEL_NEW_PPPOX  := true
-TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/root/kernel
+
+TARGET_KERNEL_CONFIG    := evervolv_mahimahi_defconfig
+TARGET_PREBUILT_KERNEL  := device/htc/passion/prebuilt/kernel
 
 # GPS HAL and AMSS version
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := mahimahi
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 3200
 
-# RIL
-BOARD_USE_NEW_LIBRIL_HTC := true
-
 # Hacks
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
 BOARD_USE_LEGACY_TRACKPAD       := true
+BOARD_USE_LEGACY_TOUCHSCREEN    := true
 
-# cat /proc/mtd #AOSP                   # cat /proc/mtd #CM7
-# dev:    size   erasesize  name        # dev:    size   erasesize  name
-# mtd0: 000e0000 00020000 "misc"        # mtd0: 000e0000 00020000 "misc"
-# mtd1: 00500000 00020000 "recovery"    # mtd1: 00400000 00020000 "recovery"
-# mtd2: 00280000 00020000 "boot"        # mtd2: 00380000 00020000 "boot"
-# mtd3: 07800000 00020000 "system"      # mtd3: 09100000 00020000 "system"
-# mtd4: 07800000 00020000 "cache"       # mtd4: 05f00000 00020000 "cache"
-# mtd5: 0c440000 00020000 "userdata"    # mtd5: 0c440000 00020000 "userdata"
-# mtd6: 00200000 00020000 "crashdata"
-BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00300000 #0x00380000
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00400000
-
-ifeq ($(MINISKIRT),true)
-# Less fonts saves ~2mb
-SMALLER_FONT_FOOTPRINT := true
-# Less sounds (ringtones/notifications)
-MINIMAL_NEWWAVELABS := true
-# Stock hboot has smaller system partition
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 150994944 #0x09000000 #0x08400000
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 205783040 #0x0c440000
-else
-# Use larger system partiton
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 230686720
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 209715200
-endif
-
+# Boot:     0x00380000 3.5 MB (reduced to 3.0 #3.25)
+# Recovery: 0x00400000 4 MB
+# System:   0x10400000 260 MB
+# Userdata: 0x0a840000 168.25 MB
+BOARD_BOOTIMAGE_PARTITION_SIZE := 3145728 #3407872 #3670016
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 4194304
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 272629760
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 176422912
 BOARD_FLASH_BLOCK_SIZE := 131072
