@@ -1,0 +1,15 @@
+#!/system/xbin/bash
+
+mount='/system/bin/mount'
+mkdir='/system/bin/mkdir'
+sdext='/dev/block/mmcblk0p2'
+
+$mount -o remount,rw /
+$mkdir /sd-ext
+$mount -o remount,ro /
+
+if [ -e $sdext ];
+then
+        $mount -t ext4 $sdext /sd-ext
+	$mount -t ext3 $sdext /sd-ext
+fi;

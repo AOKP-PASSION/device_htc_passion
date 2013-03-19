@@ -94,6 +94,7 @@ PRODUCT_COPY_FILES += \
 	device/htc/passion/prebuilt/bin/a2sd:system/bin/a2sd \
 	device/htc/passion/prebuilt/bin/fix_permissions:system/bin/fix_permissions \
 	device/htc/passion/prebuilt/etc/profile:system/etc/profile \
+	device/htc/passion/prebuilt/etc/init.d/03sdcard:system/etc/init.d/03sdcard \
 	device/htc/passion/prebuilt/etc/init.d/05mountext:system/etc/init.d/05mountext \
 	device/htc/passion/prebuilt/etc/init.d/06handleswap:system/etc/init.d/06handleswap \
 	device/htc/passion/prebuilt/etc/init.d/10apps2sd:system/etc/init.d/10apps2sd \
@@ -108,10 +109,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	
 #AOKP
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.device.chipset=Qualcomm Snapdragon QSD8K \
+	ro.device.chipset=Qualcomm.Snapdragon.QSD8K \
 	ro.device.cpu=1.1GHz \
-	ro.device.gpu=Adreno 200 \
-	ro.device.rear_cam=5 MP \ 
+	ro.device.gpu=Adreno200 \
+	ro.device.rear_cam=5MP \ 
 	ro.device.front_cam=None \
 	ro.device.screen_res=480x800	
 		
