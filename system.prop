@@ -1,0 +1,7 @@
+# hardware info
+ro.device.chipset=Qualcomm Snapdragon QSD8K
+ro.device.cpu=1.1GHz  
+ro.device.gpu=Adreno 200
+ro.device.rear_cam=5 MP
+ro.device.front_cam=none
+ro.device.screen_res=480x800

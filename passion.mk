@@ -106,16 +106,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.goo.board=passion \
     ro.goo.rom=AOKPMR1passion \
     ro.goo.version=$(shell date +%Y%m%d)
-	
-#AOKP
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.device.chipset=Qualcomm.Snapdragon.QSD8K \
-	ro.device.cpu=1.1GHz \
-	ro.device.gpu=Adreno200 \
-	ro.device.rear_cam=5MP \ 
-	ro.device.front_cam=None \
-	ro.device.screen_res=480x800	
-		
+			
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
