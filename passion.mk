@@ -107,6 +107,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.goo.rom=AOKPMR1passion \
     ro.goo.version=$(shell date +%Y%m%d)
 			
+# Optional packages
+PRODUCT_PACKAGES += \
+    AndroidTerm
+	
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
