@@ -68,6 +68,10 @@ PRODUCT_COPY_FILES += \
     device/htc/passion/init.mahimahi.rc:root/init.mahimahi.rc \
     device/htc/passion/init.mahimahi.usb.rc:root/init.mahimahi.usb.rc \
     device/htc/passion/ueventd.mahimahi.rc:root/ueventd.mahimahi.rc
+	
+# Wifi tether
+PRODUCT_COPY_FILES += \
+	device/htc/passion/prebuilt/bin/hostapd:system/bin/hostapd
 
 # Prebuilt files/configs
 PRODUCT_COPY_FILES += \
@@ -82,7 +86,7 @@ PRODUCT_COPY_FILES += \
     device/htc/passion/vold.fstab:system/etc/vold.fstab \
     device/htc/passion/sysctl.conf:system/etc/sysctl.conf
 
-#a2sd	
+# a2sd
 PRODUCT_COPY_FILES += \
     device/htc/passion/prebuilt/lib/libncurses.so:system/lib/libncurses.so \
 	device/htc/passion/prebuilt/xbin/bash:system/xbin/bash \

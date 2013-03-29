@@ -5,3 +5,6 @@ ro.device.gpu=Adreno 200
 ro.device.rear_cam=5 MP
 ro.device.front_cam=none
 ro.device.screen_res=480x800
+
+#bootanim
+debug.sf.nobootanimation=0
