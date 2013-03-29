@@ -109,7 +109,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 			
 # Optional packages
 PRODUCT_PACKAGES += \
-    AndroidTerm
+    AndroidTerm \
+    Torch 
 	
 # Permissions
 PRODUCT_COPY_FILES += \
